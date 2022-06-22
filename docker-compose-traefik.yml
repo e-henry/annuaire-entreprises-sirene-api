@@ -22,3 +22,4 @@ services:
 networks:
     backendsiren:
         driver: bridge
+        name: annuaire-entreprises-sirene-api_backendsiren
