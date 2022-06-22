@@ -99,7 +99,7 @@ http://recherche.entreprise.dataeng.etalab.studio/autocomplete?q=DIRECTION%20INT
 docker-compose -f docker-compose-traefik.yml up --build -d
 ```
 
-3. Changement des valeurs des variables d'environnement dans les fichiers ```docker-compose-blue.yml``` et ```docker-compose-green.yml```. Mettre les valeurs de votre choix pour les services ```db``` et ```postgres```:
+3. Changement des valeurs des variables d'environnement dans les fichiers ```docker-compose-postgres-blue.yml```, ```docker-compose-postgres-green.yml``` ```docker-compose-postgrest-blue.yml``` et ```docker-compose-postgrest-green.yml```. Mettre les valeurs de votre choix pour les services ```db``` et ```postgres```:
 
 ```
 ...
@@ -119,14 +119,22 @@ docker-compose -f docker-compose-traefik.yml up --build -d
       ...
 ```
 
-4. Première mise en production du backend 
+4. Construction de la base de données postgresql. Dure plusieurs heures et peut consommer jusqu'à 60Go de disque, mais une 40aine de Go est libérée à la fin du process.
+Attendre que le conteneur publie ce log : ```PostgreSQL init process complete; ready for start up.``` et que les erreurs sur la fonction ```get_etablissement``` provoquées par le HEALTH_CHECK disparaissent.
 
 ```
-docker-compose -f docker-compose-blue.yml build --no-cache
-docker-compose -f docker-compose-blue.yml --project-name=blue up --build -d
+docker-compose -f docker-compose-postgres-blue.yml build --no-cache
+docker-compose -f docker-compose-postgres-blue.yml --project-name=blue up --build
 ```
 
-5. Accès à l'API
+
+5. Première mise en production du backend 
+
+```
+docker-compose -f docker-compose-postgrest-blue.yml up --build
+```
+
+6. Accès à l'API
 
 Vous pouvez accéder à l'API via http://IP:3000/ et requêter la base via la [documentation postgrest](http://postgrest.org/).
 Exemple :
@@ -134,7 +142,7 @@ Exemple :
 http://localhost:3000/etablissements_view?tsv=plfts.boucherie&limit=100 # Retourne les 100 premiers résultats de boucherie dans la base
 ```
 
-6. Lorsqu'une nouvelle version des données est disponible : 
+7. Lorsqu'une nouvelle version des données est disponible : 
 
 ```
 ./deploy.sh
