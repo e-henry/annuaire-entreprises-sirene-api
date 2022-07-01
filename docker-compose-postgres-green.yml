@@ -12,8 +12,8 @@ services:
       - POSTGRES_USER=sirene
       - POSTGRES_PASSWORD=sirene
     networks:
-       - traefik
+       - backendsiren
 networks:
-    traefik:
-        external:
-            name: annuaire-entreprises-sirene-api_backendsiren
+    backendsiren:
+        name: annuaire-entreprises-sirene-api_backendsiren
+        external: true
