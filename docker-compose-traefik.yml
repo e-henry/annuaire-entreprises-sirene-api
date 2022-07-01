@@ -5,21 +5,32 @@ services:
   traefik:
     image: "traefik:v2.3"
     networks:
-      - backendsiren
+      backendsiren:
+        ipv4_address: 172.18.0.2
+        aliases: 
+          - traefik_host
     container_name: "traefik"
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
+      # - "--accesslog=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.postgrest.address=:3000"
       - "--entrypoints.aio.address=:4400"
-    ports:
-      - "3000:3000"
-      - "4400:4400"
-      - "8090:8080"
+    # Don't expose ports to the outside
+    # ports:
+    #   - "3000:3000"
+    #   - "4400:4400"
+    #   - "8090:8080"
+    expose: [3000,4400,8080]
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
 networks:
     backendsiren:
-        driver: bridge
-        name: annuaire-entreprises-sirene-api_backendsiren
+      ipam:
+        driver: default
+        config:
+          #- name: annuaire-entreprises-sirene-api_backendsiren
+          - subnet: "172.18.0.0/24"
+
