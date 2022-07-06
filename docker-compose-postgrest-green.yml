@@ -1,4 +1,4 @@
-version: '3'
+version: '3.6'
 services:
   postgrest:
     build: 
@@ -20,5 +20,5 @@ services:
       - "traefik.port=3000"
 networks:
     backendsiren:
-        name: annuaire-entreprises-sirene-api_backendsiren
-        external: true
+      name: annuaire-entreprises-sirene-api_backendsiren
+      external: true
