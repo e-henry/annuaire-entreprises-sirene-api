@@ -1,9 +1,8 @@
 #!/bin/sh
 
-ENV="db-blue"
-echo $ENV
+ENV="blue"
 
-if [ $(docker ps -f name=db-$ENV -q | wc -l) = 0 ]
+if [ "$(docker ps -f name=db-$ENV -q | wc -l)" = 0 ]
 then
     ENV="blue"
     OLD="green"
@@ -12,21 +11,21 @@ else
     OLD="blue"
 fi
 
-echo $ENV
+echo "Switching to ENV $ENV (old is $OLD)"
 
-echo "Starting Postgres "$ENV" container"
+echo "Starting Postgres $ENV container"
 docker-compose -f docker-compose-postgres-$ENV.yml --project-name=$ENV up --build -d
 
-while [ $(docker ps --filter "health=healthy" | grep $ENV | wc -l) = 0 ]
+while [ "$(docker ps --filter 'health=healthy' | grep -c $ENV)" = 0 ]
 do
     sleep 30s
     echo "Waiting..."
 done
 
-echo "Starting Postgrest "$ENV" container"
+echo "Starting Postgrest $ENV container"
 docker-compose -f docker-compose-postgrest-$ENV.yml --project-name=$ENV up --build -d
 
-while [ $(docker ps --filter "health=healthy" | grep $ENV | wc -l) = 0 ]
+while [ "$(docker ps --filter "health=healthy" | grep -c $ENV)" != 2 ]
 do
     sleep 30s
     echo "Waiting..."
@@ -34,6 +33,6 @@ done
 
 echo "Container up and healthy"
 
-echo "Stopping "$OLD" container"
+echo "Stopping $OLD container"
 docker-compose -f docker-compose-postgres-$OLD.yml --project-name=$OLD down
 docker-compose -f docker-compose-postgrest-$OLD.yml --project-name=$OLD down
