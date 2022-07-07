@@ -43,7 +43,10 @@ CREATE VIEW etablissements_view AS
         T.codecommuneetablissement as commune, 
         T.etatadministratifetablissement as etat_administratif_etablissement,
         N.economieSocialeSolidaireUniteLegale,
-        N.identifiantAssociationUniteLegale
+        N.identifiantAssociationUniteLegale,
+        N.tsv,
+        N.tsv_nomentreprise,
+        N.tsv_enseigne
     FROM siret T 
     LEFT JOIN siren_full N 
     ON N.siren = T.siren;"
