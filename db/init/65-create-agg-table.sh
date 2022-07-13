@@ -33,6 +33,7 @@ psql -U $POSTGRES_USER -d $POSTGRES_DB -c "
             N.denominationunitelegale as nom_raison_sociale, 
             T.numerovoieetablissement as numero_voie, 
             N.prenom1unitelegale as prenom, 
+            N.sexeUniteLegale as sexe, 
             N.sigleunitelegale as sigle, 
             N.siren, 
             T.siret, 
