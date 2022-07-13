@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION get_etablissement_fts (search text, page_ask text, per_page_ask text) 
 returns table (
-    unite_legale jsonb,
+    etablissement jsonb,
     total_results bigint,
     total_pages integer,
     page integer,
@@ -70,7 +70,7 @@ BEGIN
                                 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
                                 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
-                        ) as unite_legale,
+                        ) as etablissement,
                         min(t.rowcount) as total_results,
                         CAST (ROUND(((min(t.rowcount)+(CAST (per_page_ask AS INTEGER))-1)/(CAST (per_page_ask AS INTEGER)))) AS INTEGER) as total_pages, 
                         CAST (page_ask AS INTEGER) as page,
@@ -197,7 +197,7 @@ BEGIN
                                 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
                                 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
-                        ) as unite_legale,
+                        ) as etablissement,
                         min(t.rowcount) as total_results,
                         CAST (ROUND(((min(t.rowcount)+(CAST (per_page_ask AS INTEGER))-1)/(CAST (per_page_ask AS INTEGER)))) AS INTEGER) as total_pages, 
                         CAST (page_ask AS INTEGER) as page,
@@ -320,7 +320,7 @@ BEGIN
                             'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
                             'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                         )
-                    ) as unite_legale,
+                    ) as etablissement,
                     min(t.rowcount) as total_results,
                     CAST (ROUND(((min(t.rowcount)+(CAST (per_page_ask AS INTEGER))-1)/(CAST (per_page_ask AS INTEGER)))) AS INTEGER) as total_pages, 
                     CAST (page_ask AS INTEGER) as page,
