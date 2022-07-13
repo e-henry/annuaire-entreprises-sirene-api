@@ -9,12 +9,12 @@ returns table (
 language plpgsql
 as \$\$
 DECLARE 
-    totalcountnomul INTEGER := (SELECT COUNT(*) FROM (SELECT * FROM siren_full WHERE tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) LIMIT 2000) tbl);
+    totalcountnomul INTEGER := (SELECT COUNT(*) FROM (SELECT * FROM etablissements_view WHERE tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) LIMIT 2000) tbl);
     totalcount INTEGER;
     offsetNb INTEGER := (SELECT ((CAST (page_ask AS INTEGER) - 1)*(CAST (per_page_ask AS INTEGER))));
 BEGIN
     IF (totalcountnomul < 2000) THEN
-        totalcount := (SELECT COUNT(*) FROM (SELECT * FROM siren_full WHERE tsv @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) LIMIT 2000) tbl);
+        totalcount := (SELECT COUNT(*) FROM (SELECT * FROM etablissements_view WHERE tsv @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) LIMIT 2000) tbl);
         IF (totalcount < 2000) THEN
             return query 
                 SELECT 
@@ -129,7 +129,7 @@ BEGIN
                             economieSocialeSolidaireUniteLegale,
                             identifiantAssociationUniteLegale
                         FROM
-                            siren_full 
+                            etablissements_view 
                         WHERE 
                             tsv @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
                         ORDER BY 
@@ -255,7 +255,7 @@ BEGIN
                             economieSocialeSolidaireUniteLegale,
                             identifiantAssociationUniteLegale
                         FROM
-                            siren_full 
+                            etablissements_view 
                         WHERE 
                             tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
                         ORDER BY
@@ -378,7 +378,7 @@ BEGIN
                         economieSocialeSolidaireUniteLegale,
                         identifiantAssociationUniteLegale
                     FROM
-                        siren_full 
+                        etablissements_view 
                     WHERE 
                         tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
                     OFFSET offsetNb
