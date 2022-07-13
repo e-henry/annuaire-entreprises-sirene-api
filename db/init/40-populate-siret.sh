@@ -17,4 +17,5 @@ done
 
 psql -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE INDEX siret_siret ON siret (siret);"
 psql -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE INDEX siret_siren ON siret (siren);"
+psql -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE INDEX siret_etatadministratifetablissement ON siret (etatadministratifetablissement);"
 
