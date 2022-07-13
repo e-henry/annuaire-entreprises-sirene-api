@@ -7,14 +7,14 @@ returns table (
     per_page integer
 ) 
 language plpgsql
-as \$\$
+as $$
 DECLARE 
-    totalcountnomul INTEGER := (SELECT COUNT(*) FROM (SELECT * FROM etablissements_view WHERE tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) LIMIT 2000) tbl);
+    totalcountnomul INTEGER := (SELECT COUNT(*) FROM (SELECT * FROM etablissements_view WHERE etat_administratif_etablissement =  'A' AND tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) LIMIT 2000) tbl);
     totalcount INTEGER;
     offsetNb INTEGER := (SELECT ((CAST (page_ask AS INTEGER) - 1)*(CAST (per_page_ask AS INTEGER))));
 BEGIN
     IF (totalcountnomul < 2000) THEN
-        totalcount := (SELECT COUNT(*) FROM (SELECT * FROM etablissements_view WHERE tsv @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) LIMIT 2000) tbl);
+        totalcount := (SELECT COUNT(*) FROM (SELECT * FROM etablissements_view WHERE etat_administratif_etablissement = 'A' AND tsv @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) LIMIT 2000) tbl);
         IF (totalcount < 2000) THEN
             return query 
                 SELECT 
@@ -23,7 +23,7 @@ BEGIN
                                 'activite_principale', t.activite_principale,
                                 'activite_principale_entreprise', t.activite_principale_entreprise,
                                 'activite_principale_registre_metier', t.activite_principale_registre_metier,
-                                'statut_unite_legale', t.statut_unite_legale,
+                                -- 'statut_unite_legale', t.statut_unite_legale,
                                 'categorie_entreprise', t.categorie_entreprise,
                                 'cedex', t.cedex,
                                 'code_postal', t.code_postal,
@@ -60,15 +60,15 @@ BEGIN
                                 'type_voie', t.type_voie,
                                 'commune', t.commune,
                                 'tsv', t.tsv,
-                                'etablissements', t.etablissements,
-                                'nombre_etablissements', t.nombre_etablissements,
+                                -- 'etablissements', t.etablissements,
+                                -- 'nombre_etablissements', t.nombre_etablissements,
                                 'score', t.score,
-                                'etat_administratif_etablissement', t.etat_administratif_etablissement,
-                                'nom_complet', t.nom_complet,
-                                'nom_url', t.nom_url,
-                                'numero_tva_intra', t.numero_tva_intra,
-                                'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                                'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                                'etat_administratif_etablissement', t.etat_administratif_etablissement
+                                -- 'nom_complet', t.nom_complet,
+                                -- 'nom_url', t.nom_url,
+                                -- 'numero_tva_intra', t.numero_tva_intra,
+                                -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                                -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
                         ) as etablissement,
                         min(t.rowcount) as total_results,
@@ -83,7 +83,7 @@ BEGIN
                             activite_principale, 
                             activite_principale_entreprise, 
                             activite_principale_registre_metier, 
-                            statut_unite_legale,
+                            -- statut_unite_legale,
                             categorie_entreprise, 
                             cedex, 
                             code_postal, 
@@ -120,23 +120,24 @@ BEGIN
                             type_voie, 
                             commune, 
                             tsv,
-                            etablissements,
-                            nombre_etablissements,
-                            etat_administratif_etablissement,
-                            nom_complet,
-                            nom_url,
-                            numero_tva_intra,
-                            economieSocialeSolidaireUniteLegale,
-                            identifiantAssociationUniteLegale
+                            -- etablissements,
+                            -- nombre_etablissements,
+                            etat_administratif_etablissement
+                            -- nom_complet,
+                            -- nom_url,
+                            -- numero_tva_intra,
+                            -- economieSocialeSolidaireUniteLegale,
+                            -- identifiantAssociationUniteLegale
                         FROM
                             etablissements_view 
                         WHERE 
-                            tsv @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
+                            etat_administratif_etablissement='A'
+                            AND tsv @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
                         ORDER BY 
                             etat_administratif_etablissement, 
                             (CASE WHEN tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) THEN FALSE ELSE TRUE END),
                             score DESC, 
-                            nombre_etablissements DESC,
+                            -- nombre_etablissements DESC,
                             (CASE WHEN tsv_nomprenom @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) THEN FALSE ELSE TRUE END),
                             (CASE WHEN tsv_enseigne @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) THEN FALSE ELSE TRUE END),
                             (CASE WHEN tsv_adresse @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) THEN FALSE ELSE TRUE END)
@@ -151,7 +152,7 @@ BEGIN
                                 'activite_principale', t.activite_principale,
                                 'activite_principale_entreprise', t.activite_principale_entreprise,
                                 'activite_principale_registre_metier', t.activite_principale_registre_metier,
-                                'statut_unite_legale', t.statut_unite_legale,
+                                -- 'statut_unite_legale', t.statut_unite_legale,
                                 'categorie_entreprise', t.categorie_entreprise,
                                 'cedex', t.cedex,
                                 'code_postal', t.code_postal,
@@ -188,14 +189,14 @@ BEGIN
                                 'type_voie', t.type_voie,
                                 'commune', t.commune,
                                 'tsv', t.tsv,
-                                'etablissements', t.etablissements,
-                                'nombre_etablissements', t.nombre_etablissements,
-                                'etat_administratif_etablissement', t.etat_administratif_etablissement,
-                                'nom_complet',t.nom_complet,
-                                'nom_url', t.nom_url,
-                                'numero_tva_intra', t.numero_tva_intra,
-                                'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                                'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                                -- 'etablissements', t.etablissements,
+                                -- 'nombre_etablissements', t.nombre_etablissements,
+                                'etat_administratif_etablissement', t.etat_administratif_etablissement
+                                -- 'nom_complet',t.nom_complet,
+                                -- 'nom_url', t.nom_url,
+                                -- 'numero_tva_intra', t.numero_tva_intra,
+                                -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                                -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
                         ) as etablissement,
                         min(t.rowcount) as total_results,
@@ -209,7 +210,7 @@ BEGIN
                             activite_principale, 
                             activite_principale_entreprise, 
                             activite_principale_registre_metier, 
-                            statut_unite_legale,
+                            -- statut_unite_legale,
                             categorie_entreprise, 
                             cedex, 
                             code_postal, 
@@ -246,21 +247,22 @@ BEGIN
                             type_voie, 
                             commune, 
                             tsv,
-                            etablissements,
-                            nombre_etablissements,
-                            etat_administratif_etablissement,
-                            nom_complet,
-                            nom_url,
-                            numero_tva_intra,
-                            economieSocialeSolidaireUniteLegale,
-                            identifiantAssociationUniteLegale
+                            -- etablissements,
+                            -- nombre_etablissements,
+                            etat_administratif_etablissement
+                            -- nom_complet,
+                            -- nom_url,
+                            -- numero_tva_intra,
+                            -- economieSocialeSolidaireUniteLegale,
+                            -- identifiantAssociationUniteLegale
                         FROM
                             etablissements_view 
                         WHERE 
-                            tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
+                            etat_administratif_etablissement = 'A'
+                            AND tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
                         ORDER BY
-                            etat_administratif_etablissement,
-                            nombre_etablissements DESC
+                            etat_administratif_etablissement
+                            -- nombre_etablissements DESC
                         OFFSET offsetNb
                         LIMIT CAST (per_page_ask AS INTEGER)
                     ) t;   
@@ -274,7 +276,7 @@ BEGIN
                             'activite_principale', t.activite_principale,
                             'activite_principale_entreprise', t.activite_principale_entreprise,
                             'activite_principale_registre_metier', t.activite_principale_registre_metier,
-                            'statut_unite_legale', t.statut_unite_legale,
+                            -- 'statut_unite_legale', t.statut_unite_legale,
                             'categorie_entreprise', t.categorie_entreprise,
                             'cedex', t.cedex,
                             'code_postal', t.code_postal,
@@ -311,14 +313,14 @@ BEGIN
                             'type_voie', t.type_voie,
                             'commune', t.commune,
                             'tsv', t.tsv,
-                            'etablissements', t.etablissements,
-                            'nombre_etablissements', t.nombre_etablissements,
-                            'etat_administratif_etablissement', t.etat_administratif_etablissement,
-                            'nom_complet',t.nom_complet,
-                            'nom_url', t.nom_url,
-                            'numero_tva_intra', t.numero_tva_intra,
-                            'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                            'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                            -- 'etablissements', t.etablissements,
+                            -- 'nombre_etablissements', t.nombre_etablissements,
+                            'etat_administratif_etablissement', t.etat_administratif_etablissement
+                            -- 'nom_complet',t.nom_complet,
+                            -- 'nom_url', t.nom_url,
+                            -- 'numero_tva_intra', t.numero_tva_intra,
+                            -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                            -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                         )
                     ) as etablissement,
                     min(t.rowcount) as total_results,
@@ -332,7 +334,7 @@ BEGIN
                         activite_principale, 
                         activite_principale_entreprise, 
                         activite_principale_registre_metier, 
-                        statut_unite_legale,
+                        -- statut_unite_legale,
                         categorie_entreprise, 
                         cedex, 
                         code_postal, 
@@ -369,20 +371,21 @@ BEGIN
                         type_voie, 
                         commune, 
                         tsv,
-                        etablissements,
-                        nombre_etablissements,
-                        etat_administratif_etablissement,
-                        nom_complet,
-                        nom_url,
-                        numero_tva_intra,
-                        economieSocialeSolidaireUniteLegale,
-                        identifiantAssociationUniteLegale
+                        -- etablissements,
+                        -- nombre_etablissements,
+                        etat_administratif_etablissement
+                        -- nom_complet,
+                        -- nom_url,
+                        -- numero_tva_intra,
+                        -- economieSocialeSolidaireUniteLegale,
+                        -- identifiantAssociationUniteLegale
                     FROM
                         etablissements_view 
                     WHERE 
-                        tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
+                        etat_administratif_etablissement = 'A'
+                        AND tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
                     OFFSET offsetNb
                     LIMIT CAST (per_page_ask AS INTEGER)
                 ) t;   
     END IF;
-end;\$\$;
+end;$$;
