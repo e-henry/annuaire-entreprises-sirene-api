@@ -34,6 +34,7 @@ CREATE VIEW etablissements_view AS
         N.nom_raison_sociale, 
         T.numerovoieetablissement as numero_voie, 
         N.prenom, 
+        N.sexe, 
         N.sigle, 
         N.siren, 
         T.siret, 
