@@ -555,6 +555,7 @@ BEGIN
                                 'nom_raison_sociale', t.nom_raison_sociale,
                                 'numero_voie', t.numero_voie,
                                 'prenom', t.prenom,
+                                'sexe', t.sexe,
                                 'sigle', t.sigle,
                                 'siren', t.siren,
                                 'siret', t.siret,
@@ -615,6 +616,7 @@ BEGIN
                             nom_raison_sociale, 
                             numero_voie, 
                             prenom, 
+                            sexe,
                             sigle, 
                             siren, 
                             siret, 
@@ -684,6 +686,7 @@ BEGIN
                                 'nom_raison_sociale', t.nom_raison_sociale,
                                 'numero_voie', t.numero_voie,
                                 'prenom', t.prenom,
+                                'sexe', t.sexe,
                                 'sigle', t.sigle,
                                 'siren', t.siren,
                                 'siret', t.siret,
@@ -742,6 +745,7 @@ BEGIN
                             nom_raison_sociale, 
                             numero_voie, 
                             prenom, 
+                            sexe,
                             sigle, 
                             siren, 
                             siret, 
@@ -808,6 +812,7 @@ BEGIN
                             'nom_raison_sociale', t.nom_raison_sociale,
                             'numero_voie', t.numero_voie,
                             'prenom', t.prenom,
+                            'sexe', t.sexe,
                             'sigle', t.sigle,
                             'siren', t.siren,
                             'siret', t.siret,
@@ -866,6 +871,7 @@ BEGIN
                         nom_raison_sociale, 
                         numero_voie, 
                         prenom, 
+                        sexe,
                         sigle, 
                         siren, 
                         siret, 
@@ -892,8 +898,6 @@ BEGIN
                 ) t;   
     END IF;
 end;\$\$;"
-
-
 
 psql -U $POSTGRES_USER -d $POSTGRES_DB  -c "CREATE OR REPLACE FUNCTION get_etablissements (siren_search text, page_ask text) 
 returns table (
