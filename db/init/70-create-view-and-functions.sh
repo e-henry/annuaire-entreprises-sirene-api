@@ -91,6 +91,7 @@ CREATE VIEW etablissements_siren AS
         N.nom_raison_sociale, 
         T.numerovoieetablissement as numero_voie, 
         N.prenom, 
+        N.sexe,
         N.sigle, 
         N.siren, 
         T.siret, 
@@ -165,6 +166,7 @@ BEGIN
                                 'nom_raison_sociale', t.nom_raison_sociale,
                                 'numero_voie', t.numero_voie,
                                 'prenom', t.prenom,
+                                'sexe', t.sexe,
                                 'sigle', t.sigle,
                                 'siren', t.siren,
                                 'siret', t.siret,
@@ -225,6 +227,7 @@ BEGIN
                             nom_raison_sociale, 
                             numero_voie, 
                             prenom, 
+                            sexe,
                             sigle, 
                             siren, 
                             siret, 
@@ -293,6 +296,7 @@ BEGIN
                                 'nom_raison_sociale', t.nom_raison_sociale,
                                 'numero_voie', t.numero_voie,
                                 'prenom', t.prenom,
+                                'sexe', t.sexe,
                                 'sigle', t.sigle,
                                 'siren', t.siren,
                                 'siret', t.siret,
@@ -351,6 +355,7 @@ BEGIN
                             nom_raison_sociale, 
                             numero_voie, 
                             prenom, 
+                            sexe,
                             sigle, 
                             siren, 
                             siret, 
@@ -416,6 +421,7 @@ BEGIN
                             'nom_raison_sociale', t.nom_raison_sociale,
                             'numero_voie', t.numero_voie,
                             'prenom', t.prenom,
+                            'sexe', t.sexe,
                             'sigle', t.sigle,
                             'siren', t.siren,
                             'siret', t.siret,
@@ -474,6 +480,7 @@ BEGIN
                         nom_raison_sociale, 
                         numero_voie, 
                         prenom, 
+                        sexe,
                         sigle, 
                         siren, 
                         siret, 
@@ -569,12 +576,12 @@ BEGIN
                                 -- 'etablissements', t.etablissements,
                                 -- 'nombre_etablissements', t.nombre_etablissements,
                                 'score', t.score,
-                                'etat_administratif_etablissement', t.etat_administratif_etablissement
-                                -- 'nom_complet', t.nom_complet,
-                                -- 'nom_url', t.nom_url,
-                                -- 'numero_tva_intra', t.numero_tva_intra,
-                                -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                                -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                                'etat_administratif_etablissement', t.etat_administratif_etablissement,
+                                'nom_complet', t.nom_complet,
+                                'nom_url', t.nom_url,
+                                'numero_tva_intra', t.numero_tva_intra,
+                                'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                                'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
                         ) as etablissement,
                         min(t.rowcount) as total_results,
@@ -630,12 +637,12 @@ BEGIN
                             tsv,
                             -- etablissements,
                             -- nombre_etablissements,
-                            etat_administratif_etablissement
-                            -- nom_complet,
-                            -- nom_url,
-                            -- numero_tva_intra,
-                            -- economieSocialeSolidaireUniteLegale,
-                            -- identifiantAssociationUniteLegale
+                            etat_administratif_etablissement,
+                            nom_complet,
+                            nom_url,
+                            numero_tva_intra,
+                            economieSocialeSolidaireUniteLegale,
+                            identifiantAssociationUniteLegale
                         FROM
                             etablissements_view 
                         WHERE 
@@ -701,12 +708,12 @@ BEGIN
                                 'tsv', t.tsv,
                                 -- 'etablissements', t.etablissements,
                                 -- 'nombre_etablissements', t.nombre_etablissements,
-                                'etat_administratif_etablissement', t.etat_administratif_etablissement
-                                -- 'nom_complet',t.nom_complet,
-                                -- 'nom_url', t.nom_url,
-                                -- 'numero_tva_intra', t.numero_tva_intra,
-                                -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                                -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                                'etat_administratif_etablissement', t.etat_administratif_etablissement,
+                                'nom_complet',t.nom_complet,
+                                'nom_url', t.nom_url,
+                                'numero_tva_intra', t.numero_tva_intra,
+                                'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                                'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
                         ) as etablissement,
                         min(t.rowcount) as total_results,
@@ -761,12 +768,12 @@ BEGIN
                             tsv,
                             -- etablissements,
                             -- nombre_etablissements,
-                            etat_administratif_etablissement
-                            -- nom_complet,
-                            -- nom_url,
-                            -- numero_tva_intra,
-                            -- economieSocialeSolidaireUniteLegale,
-                            -- identifiantAssociationUniteLegale
+                            etat_administratif_etablissement,
+                            nom_complet,
+                            nom_url,
+                            numero_tva_intra,
+                            economieSocialeSolidaireUniteLegale,
+                            identifiantAssociationUniteLegale
                         FROM
                             etablissements_view 
                         WHERE 
@@ -829,12 +836,12 @@ BEGIN
                             'tsv', t.tsv,
                             -- 'etablissements', t.etablissements,
                             -- 'nombre_etablissements', t.nombre_etablissements,
-                            'etat_administratif_etablissement', t.etat_administratif_etablissement
-                            -- 'nom_complet',t.nom_complet,
-                            -- 'nom_url', t.nom_url,
-                            -- 'numero_tva_intra', t.numero_tva_intra,
-                            -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                            -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                            'etat_administratif_etablissement', t.etat_administratif_etablissement,
+                            'nom_complet',t.nom_complet,
+                            'nom_url', t.nom_url,
+                            'numero_tva_intra', t.numero_tva_intra,
+                            'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                            'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                         )
                     ) as etablissement,
                     min(t.rowcount) as total_results,
@@ -951,8 +958,10 @@ BEGIN
                             'nom_raison_sociale', t.nom_raison_sociale,
                             'numero_voie', t.numero_voie,
                             'prenom', t.prenom,
+                            'sexe', t.sexe,
                             'sigle', t.sigle,
                             'siren', t.siren,
+                            'siege_geo_adresse', t.siege_geo_adresse,
                             'siret', t.siret,
                             'tranche_effectif_salarie', t.tranche_effectif_salarie,
                             'tranche_effectif_salarie_entreprise', t.tranche_effectif_salarie_entreprise,
@@ -1015,8 +1024,10 @@ BEGIN
                             'nom_raison_sociale', t.nom_raison_sociale,
                             'numero_voie', t.numero_voie,
                             'prenom', t.prenom,
+                            'sexe', t.sexe,
                             'sigle', t.sigle,
                             'siren', t.siren,
+                            'siege_geo_adresse', t.siege_geo_adresse,
                             'siret', t.siret,
                             'tranche_effectif_salarie', t.tranche_effectif_salarie,
                             'tranche_effectif_salarie_entreprise', t.tranche_effectif_salarie_entreprise,
@@ -1092,8 +1103,10 @@ BEGIN
                     'nom_raison_sociale', t.nom_raison_sociale, 
                     'numero_voie', t.numero_voie, 
                     'prenom', t.prenom, 
+                    'sexe', t.sexe,
                     'sigle', t.sigle, 
                     'siren', t.siren, 
+                    'siege_geo_adresse', t.siege_geo_adresse,
                     'siret', t.siret, 
                     'tranche_effectif_salarie', t.tranche_effectif_salarie, 
                     'tranche_effectif_salarie_entreprise', t.tranche_effectif_salarie_entreprise, 
