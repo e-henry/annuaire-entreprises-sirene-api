@@ -77,3 +77,6 @@ psql -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE INDEX siren_full_activite_prin
 psql -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE INDEX siren_full_nature_juridique_entreprise ON siren_full (nature_juridique_entreprise);"
 
 psql -U $POSTGRES_USER -d $POSTGRES_DB -c "DROP TABLE siren;"
+
+psql -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE INDEX siret_tsv ON siret USING gin(tsv);"
+psql -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE INDEX siret_tsv_adresse ON siret USING gin(tsv_adresse);"
