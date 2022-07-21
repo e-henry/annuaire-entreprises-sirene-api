@@ -13,14 +13,15 @@ DECLARE
     totalcount INTEGER;
     offsetNb INTEGER := (SELECT ((CAST (page_ask AS INTEGER) - 1)*(CAST (per_page_ask AS INTEGER))));
 BEGIN
-    IF (totalcountnomul < 2000) THEN
+    IF (totalcountnomul < 2000) THEN -- Less than 2000 distinct companies
         totalcount := (SELECT COUNT(*) FROM (SELECT * FROM etablissements_view WHERE etat_administratif_etablissement = 'A' AND tsv @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) LIMIT 2000) tbl);
-        IF (totalcount < 2000) THEN
+        IF (totalcount < 2000) THEN -- Less than 2000 buildings, do a pertinence search
             return query 
                 SELECT 
                         jsonb_agg(
                             json_build_object(
                                 'activite_principale', t.activite_principale,
+                                'nomenclature_activite_principale_etablissement', t.nomenclature_activite_principale_etablissement,
                                 'activite_principale_entreprise', t.activite_principale_entreprise,
                                 'activite_principale_registre_metier', t.activite_principale_registre_metier,
                                 -- 'statut_unite_legale', t.statut_unite_legale,
@@ -55,21 +56,26 @@ BEGIN
                                 'sexe', t.sexe,
                                 'sigle', t.sigle,
                                 'siren', t.siren,
+                                'siege_geo_adresse', t.siege_geo_adresse,
                                 'siret', t.siret,
                                 'tranche_effectif_salarie', t.tranche_effectif_salarie,
                                 'tranche_effectif_salarie_entreprise', t.tranche_effectif_salarie_entreprise,
                                 'type_voie', t.type_voie,
                                 'commune', t.commune,
+                                'complement_adresse', t.complement_adresse,
+                                'commune_etranger', t.commune_etranger,
+                                'code_pays_etranger', t.code_pays_etranger,
+                                'libelle_pays_etranger', t.libelle_pays_etranger,
                                 'tsv', t.tsv,
                                 -- 'etablissements', t.etablissements,
                                 -- 'nombre_etablissements', t.nombre_etablissements,
                                 'score', t.score,
-                                'etat_administratif_etablissement', t.etat_administratif_etablissement
-                                -- 'nom_complet', t.nom_complet,
-                                -- 'nom_url', t.nom_url,
-                                -- 'numero_tva_intra', t.numero_tva_intra,
-                                -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                                -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                                'etat_administratif_etablissement', t.etat_administratif_etablissement,
+                                'nom_complet', t.nom_complet,
+                                'nom_url', t.nom_url,
+                                'numero_tva_intra', t.numero_tva_intra,
+                                'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                                'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
                         ) as etablissement,
                         min(t.rowcount) as total_results,
@@ -82,6 +88,7 @@ BEGIN
                             COUNT(*) OVER () as rowcount,
                             ts_rank(tsv,to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')),1) as score,
                             activite_principale, 
+                            nomenclature_activite_principale_etablissement,
                             activite_principale_entreprise, 
                             activite_principale_registre_metier, 
                             -- statut_unite_legale,
@@ -116,27 +123,31 @@ BEGIN
                             sexe,
                             sigle, 
                             siren, 
+                            siege_geo_adresse,
                             siret, 
                             tranche_effectif_salarie, 
                             tranche_effectif_salarie_entreprise, 
                             type_voie, 
                             commune, 
+                            complement_adresse,
+                            commune_etranger,
+                            code_pays_etranger,
+                            libelle_pays_etranger,
                             tsv,
                             -- etablissements,
                             -- nombre_etablissements,
-                            etat_administratif_etablissement
-                            -- nom_complet,
-                            -- nom_url,
-                            -- numero_tva_intra,
-                            -- economieSocialeSolidaireUniteLegale,
-                            -- identifiantAssociationUniteLegale
+                            etat_administratif_etablissement,
+                            nom_complet,
+                            nom_url,
+                            numero_tva_intra,
+                            economieSocialeSolidaireUniteLegale,
+                            identifiantAssociationUniteLegale
                         FROM
                             etablissements_view 
                         WHERE 
                             etat_administratif_etablissement='A'
                             AND tsv @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
                         ORDER BY 
-                            etat_administratif_etablissement, 
                             (CASE WHEN tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & ')) THEN FALSE ELSE TRUE END),
                             score DESC, 
                             -- nombre_etablissements DESC,
@@ -146,12 +157,13 @@ BEGIN
                         OFFSET offsetNb
                         LIMIT CAST (per_page_ask AS INTEGER)
                     ) t;        
-        ELSE
+        ELSE -- More than 2000 results don t order by pertinence
             return query
             SELECT 
                         jsonb_agg(
                             json_build_object(
                                 'activite_principale', t.activite_principale,
+                                'nomenclature_activite_principale_etablissement', t.nomenclature_activite_principale_etablissement,
                                 'activite_principale_entreprise', t.activite_principale_entreprise,
                                 'activite_principale_registre_metier', t.activite_principale_registre_metier,
                                 -- 'statut_unite_legale', t.statut_unite_legale,
@@ -186,20 +198,25 @@ BEGIN
                                 'sexe', t.sexe,
                                 'sigle', t.sigle,
                                 'siren', t.siren,
+                                'siege_geo_adresse', t.siege_geo_adresse,
                                 'siret', t.siret,
                                 'tranche_effectif_salarie', t.tranche_effectif_salarie,
                                 'tranche_effectif_salarie_entreprise', t.tranche_effectif_salarie_entreprise,
                                 'type_voie', t.type_voie,
                                 'commune', t.commune,
+                                'complement_adresse', t.complement_adresse,
+                                'commune_etranger', t.commune_etranger,
+                                'code_pays_etranger', t.code_pays_etranger,
+                                'libelle_pays_etranger', t.libelle_pays_etranger,
                                 'tsv', t.tsv,
                                 -- 'etablissements', t.etablissements,
                                 -- 'nombre_etablissements', t.nombre_etablissements,
-                                'etat_administratif_etablissement', t.etat_administratif_etablissement
-                                -- 'nom_complet',t.nom_complet,
-                                -- 'nom_url', t.nom_url,
-                                -- 'numero_tva_intra', t.numero_tva_intra,
-                                -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                                -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                                'etat_administratif_etablissement', t.etat_administratif_etablissement,
+                                'nom_complet',t.nom_complet,
+                                'nom_url', t.nom_url,
+                                'numero_tva_intra', t.numero_tva_intra,
+                                'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                                'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
                         ) as etablissement,
                         min(t.rowcount) as total_results,
@@ -211,6 +228,7 @@ BEGIN
                         SELECT
                             CAST(2000 AS BIGINT) as rowcount,
                             activite_principale, 
+                            nomenclature_activite_principale_etablissement,
                             activite_principale_entreprise, 
                             activite_principale_registre_metier, 
                             -- statut_unite_legale,
@@ -245,39 +263,42 @@ BEGIN
                             sexe,
                             sigle, 
                             siren, 
+                            siege_geo_adresse,
                             siret, 
                             tranche_effectif_salarie, 
                             tranche_effectif_salarie_entreprise, 
                             type_voie, 
                             commune, 
+                            complement_adresse,
+                            commune_etranger,
+                            code_pays_etranger,
+                            libelle_pays_etranger,
                             tsv,
                             -- etablissements,
                             -- nombre_etablissements,
-                            etat_administratif_etablissement
-                            -- nom_complet,
-                            -- nom_url,
-                            -- numero_tva_intra,
-                            -- economieSocialeSolidaireUniteLegale,
-                            -- identifiantAssociationUniteLegale
+                            etat_administratif_etablissement,
+                            nom_complet,
+                            nom_url,
+                            numero_tva_intra,
+                            economieSocialeSolidaireUniteLegale,
+                            identifiantAssociationUniteLegale
                         FROM
                             etablissements_view 
                         WHERE 
                             etat_administratif_etablissement = 'A'
                             AND tsv_nomentreprise @@ to_tsquery(REPLACE(REPLACE (search, '%20', ' & '),'%27',' & '))
-                        ORDER BY
-                            etat_administratif_etablissement
-                            -- nombre_etablissements DESC
                         OFFSET offsetNb
                         LIMIT CAST (per_page_ask AS INTEGER)
                     ) t;   
         END IF; 
                 
-    ELSE
+    ELSE -- More than 2000 companies, don t perform pertinence ordering 
         return query
         SELECT 
                     jsonb_agg(
                         json_build_object(
                             'activite_principale', t.activite_principale,
+                            'nomenclature_activite_principale_etablissement', t.nomenclature_activite_principale_etablissement,
                             'activite_principale_entreprise', t.activite_principale_entreprise,
                             'activite_principale_registre_metier', t.activite_principale_registre_metier,
                             -- 'statut_unite_legale', t.statut_unite_legale,
@@ -312,20 +333,25 @@ BEGIN
                             'sexe', t.sexe,
                             'sigle', t.sigle,
                             'siren', t.siren,
+                            'siege_geo_adresse', t.siege_geo_adresse,
                             'siret', t.siret,
                             'tranche_effectif_salarie', t.tranche_effectif_salarie,
                             'tranche_effectif_salarie_entreprise', t.tranche_effectif_salarie_entreprise,
                             'type_voie', t.type_voie,
                             'commune', t.commune,
+                            'complement_adresse', t.complement_adresse,
+                            'commune_etranger', t.commune_etranger,
+                            'code_pays_etranger', t.code_pays_etranger,
+                            'libelle_pays_etranger', t.libelle_pays_etranger,
                             'tsv', t.tsv,
                             -- 'etablissements', t.etablissements,
                             -- 'nombre_etablissements', t.nombre_etablissements,
-                            'etat_administratif_etablissement', t.etat_administratif_etablissement
-                            -- 'nom_complet',t.nom_complet,
-                            -- 'nom_url', t.nom_url,
-                            -- 'numero_tva_intra', t.numero_tva_intra,
-                            -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                            -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                            'etat_administratif_etablissement', t.etat_administratif_etablissement,
+                            'nom_complet',t.nom_complet,
+                            'nom_url', t.nom_url,
+                            'numero_tva_intra', t.numero_tva_intra,
+                            'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                            'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                         )
                     ) as etablissement,
                     min(t.rowcount) as total_results,
@@ -337,6 +363,7 @@ BEGIN
                     SELECT
                         CAST(2000 AS BIGINT) as rowcount,
                         activite_principale, 
+                        nomenclature_activite_principale_etablissement,
                         activite_principale_entreprise, 
                         activite_principale_registre_metier, 
                         -- statut_unite_legale,
@@ -371,20 +398,25 @@ BEGIN
                         sexe,
                         sigle, 
                         siren, 
+                        siege_geo_adresse,
                         siret, 
                         tranche_effectif_salarie, 
                         tranche_effectif_salarie_entreprise, 
                         type_voie, 
                         commune, 
+                        complement_adresse,
+                        commune_etranger,
+                        code_pays_etranger,
+                        libelle_pays_etranger,
                         tsv,
                         -- etablissements,
                         -- nombre_etablissements,
                         etat_administratif_etablissement
-                        -- nom_complet,
-                        -- nom_url,
-                        -- numero_tva_intra,
-                        -- economieSocialeSolidaireUniteLegale,
-                        -- identifiantAssociationUniteLegale
+                        nom_complet,
+                        nom_url,
+                        numero_tva_intra,
+                        economieSocialeSolidaireUniteLegale,
+                        identifiantAssociationUniteLegale
                     FROM
                         etablissements_view 
                     WHERE 

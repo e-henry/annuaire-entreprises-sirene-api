@@ -1,0 +1,65 @@
+
+DROP VIEW IF EXISTS etablissements_view;
+
+CREATE VIEW etablissements_view AS 
+    SELECT 
+        T.activiteprincipaleetablissement as activite_principale, 
+        T.nomenclatureactiviteprincipaleetablissement as nomenclature_activite_principale_etablissement,
+        N.activite_principale_entreprise, 
+        T.activiteprincipaleregistremetiersetablissement as activite_principale_registre_metier, 
+        N.categorie_entreprise, 
+        T.codecedexetablissement as cedex, 
+        T.codepostaletablissement as code_postal, 
+        T.datecreationetablissement as date_creation, 
+        N.date_creation_entreprise, 
+        T.datedebut as date_debut_activite, 
+        N.date_mise_a_jour, 
+        T.enseigne1etablissement as enseigne, 
+        T.geo_adresse, 
+        T.geo_id, 
+        T.geo_l4, 
+        T.geo_l5, 
+        T.geo_ligne, 
+        T.geo_score, 
+        T.geo_type, 
+        T.etablissementsiege as is_siege, 
+        T.latitude, 
+        T.libellecommuneetablissement as libelle_commune, 
+        T.libellevoieetablissement as libelle_voie, 
+        T.indicerepetitionetablissement as indice_repetition,
+        T.longitude, 
+        N.nature_juridique_entreprise, 
+        T.nic, 
+        N.nic_siege, 
+        N.nom, 
+        N.nom_raison_sociale, 
+        T.numerovoieetablissement as numero_voie, 
+        N.prenom, 
+        N.sexe, 
+        N.sigle, 
+        N.siren, 
+        N.geo_adresse as siege_geo_adresse, 
+        T.siret, 
+        T.trancheeffectifsetablissement as tranche_effectif_salarie, 
+        N.tranche_effectif_salarie_entreprise, 
+        T.typevoieetablissement as type_voie, 
+        T.complementadresseetablissement as complement_adresse,
+        T.codecommuneetablissement as commune, 
+        T.libellecommuneetrangeretablissement as commune_etranger,
+        T.codepaysetrangeretablissement as code_pays_etranger,
+        T.libellepaysetrangeretablissement as libelle_pays_etranger,
+        T.etatadministratifetablissement as etat_administratif_etablissement,
+        N.economieSocialeSolidaireUniteLegale,
+        N.identifiantAssociationUniteLegale,
+        N.nom_complet,
+        N.tsv,
+        N.tsv_nomentreprise,
+        N.tsv_nomprenom,
+        N.tsv_adresse,
+        N.tsv_enseigne
+    FROM siret T 
+    LEFT JOIN siren_full N 
+    ON N.siren = T.siren;
+
+
+
