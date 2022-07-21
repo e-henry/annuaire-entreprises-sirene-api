@@ -13,6 +13,11 @@ fi
 
 echo "Switching to ENV $ENV (old is $OLD)"
 
+echo "Cleaning docker unused objects"
+docker system prune
+docker volume prune
+
+
 echo "Starting Postgres $ENV container"
 docker-compose -f docker-compose-postgres-$ENV.yml --project-name=$ENV up --build -d
 
