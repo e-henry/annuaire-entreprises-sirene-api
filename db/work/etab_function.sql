@@ -71,11 +71,11 @@ BEGIN
                                 -- 'nombre_etablissements', t.nombre_etablissements,
                                 'score', t.score,
                                 'etat_administratif_etablissement', t.etat_administratif_etablissement,
-                                'nom_complet', t.nom_complet,
-                                'nom_url', t.nom_url,
-                                'numero_tva_intra', t.numero_tva_intra,
-                                'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                                'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                                -- 'nom_complet', t.nom_complet,
+                                -- 'nom_url', t.nom_url,
+                                'numero_tva_intra', t.numero_tva_intra
+                                -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                                -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
                         ) as etablissement,
                         min(t.rowcount) as total_results,
@@ -137,11 +137,11 @@ BEGIN
                             -- etablissements,
                             -- nombre_etablissements,
                             etat_administratif_etablissement,
-                            nom_complet,
-                            nom_url,
-                            numero_tva_intra,
-                            economieSocialeSolidaireUniteLegale,
-                            identifiantAssociationUniteLegale
+                            -- nom_complet,
+                            -- nom_url,
+                            numero_tva_intra
+                            -- economieSocialeSolidaireUniteLegale,
+                            -- identifiantAssociationUniteLegale
                         FROM
                             etablissements_view 
                         WHERE 
@@ -212,11 +212,11 @@ BEGIN
                                 -- 'etablissements', t.etablissements,
                                 -- 'nombre_etablissements', t.nombre_etablissements,
                                 'etat_administratif_etablissement', t.etat_administratif_etablissement,
-                                'nom_complet',t.nom_complet,
-                                'nom_url', t.nom_url,
-                                'numero_tva_intra', t.numero_tva_intra,
-                                'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                                'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                                -- 'nom_complet',t.nom_complet,
+                                -- 'nom_url', t.nom_url,
+                                'numero_tva_intra', t.numero_tva_intra
+                                -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                                -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                             )
                         ) as etablissement,
                         min(t.rowcount) as total_results,
@@ -278,10 +278,10 @@ BEGIN
                             -- nombre_etablissements,
                             etat_administratif_etablissement,
                             nom_complet,
-                            nom_url,
-                            numero_tva_intra,
-                            economieSocialeSolidaireUniteLegale,
-                            identifiantAssociationUniteLegale
+                            -- nom_url,
+                            numero_tva_intra
+                            -- economieSocialeSolidaireUniteLegale,
+                            -- identifiantAssociationUniteLegale
                         FROM
                             etablissements_view 
                         WHERE 
@@ -346,12 +346,12 @@ BEGIN
                             'tsv', t.tsv,
                             -- 'etablissements', t.etablissements,
                             -- 'nombre_etablissements', t.nombre_etablissements,
-                            'etat_administratif_etablissement', t.etat_administratif_etablissement,
-                            'nom_complet',t.nom_complet,
-                            'nom_url', t.nom_url,
-                            'numero_tva_intra', t.numero_tva_intra,
-                            'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
-                            'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
+                            'etat_administratif_etablissement', t.etat_administratif_etablissement
+                            -- 'nom_complet',t.nom_complet,
+                            -- 'nom_url', t.nom_url,
+                            'numero_tva_intra', t.numero_tva_intra
+                            -- 'economieSocialeSolidaireUniteLegale', t.economieSocialeSolidaireUniteLegale,
+                            -- 'identifiantAssociationUniteLegale', t.identifiantAssociationUniteLegale
                         )
                     ) as etablissement,
                     min(t.rowcount) as total_results,
@@ -411,12 +411,12 @@ BEGIN
                         tsv,
                         -- etablissements,
                         -- nombre_etablissements,
-                        etat_administratif_etablissement
-                        nom_complet,
-                        nom_url,
-                        numero_tva_intra,
-                        economieSocialeSolidaireUniteLegale,
-                        identifiantAssociationUniteLegale
+                        etat_administratif_etablissement,
+                        -- nom_complet,
+                        -- nom_url,
+                        numero_tva_intra
+                        -- economieSocialeSolidaireUniteLegale,
+                        -- identifiantAssociationUniteLegale
                     FROM
                         etablissements_view 
                     WHERE 

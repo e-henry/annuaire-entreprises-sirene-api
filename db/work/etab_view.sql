@@ -52,14 +52,14 @@ CREATE VIEW etablissements_view AS
         N.economieSocialeSolidaireUniteLegale,
         N.identifiantAssociationUniteLegale,
         N.nom_complet,
-        N.tsv,
+        N.nom_url,
+        N.numero_tva_intra,
+        T.tsv,
         N.tsv_nomentreprise,
         N.tsv_nomprenom,
-        N.tsv_adresse,
+        T.tsv_adresse,
         N.tsv_enseigne
     FROM siret T 
     LEFT JOIN siren_full N 
     ON N.siren = T.siren;
-
-
 
