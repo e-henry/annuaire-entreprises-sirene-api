@@ -1,1 +1,0 @@
-psql -U $POSTGRES_USER -d $POSTGRES_DB -c "\copy (select nom_url from siren_full WHERE nature_juridique_entreprise != '1000') to '/tmp/sitemap-name.csv' with csv"
