@@ -40,6 +40,7 @@ psql -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE TABLE siren
     nomenclatureActivitePrincipaleUniteLegale CHARACTER VARYING,
     nicSiegeUniteLegale CHARACTER VARYING,
     economieSocialeSolidaireUniteLegale CHARACTER VARYING,
+    societeMissionUniteLegale CHARACTER VARYING,
     caractereEmployeurUniteLegale CHARACTER VARYING,
     UNIQUE(siren)
 )
