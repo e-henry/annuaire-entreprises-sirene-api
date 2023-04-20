@@ -131,15 +131,15 @@ docker-compose -f docker-compose-postgres-blue.yml --project-name=blue up --buil
 5. Première mise en production du backend 
 
 ```
-docker-compose -f docker-compose-postgrest-blue.yml up --build
+docker-compose -f docker-compose-postgrest-blue.yml --project-name=blue up --build
 ```
 
 6. Accès à l'API
 
-Vous pouvez accéder à l'API via http://IP:3000/ et requêter la base via la [documentation postgrest](http://postgrest.org/).
+Vous pouvez accéder à l'API via traefik (http://172.18.0.2:3000/, définit dans `docker-compose-traefik.yml`) et requêter la base avec [postgrest](http://postgrest.org/).
 Exemple :
 ```
-http://localhost:3000/etablissements_view?tsv=plfts.boucherie&limit=100 # Retourne les 100 premiers résultats de boucherie dans la base
+curl --header 'Host:sirene_api_host' http://172.18.0.2:3000/etablissements_view?tsv=plfts.boucherie&limit=10
 ```
 
 7. Lorsqu'une nouvelle version des données est disponible : 
