@@ -1,3 +1,4 @@
+\! echo "#### 70-create-view-and-functions CREATE etablissements_view"
 
 DROP VIEW IF EXISTS etablissements_view;
 
@@ -65,6 +66,7 @@ CREATE VIEW etablissements_view AS
 ;
 
 
+\! echo "#### 70-create-view-and-functions CREATE OR REPLACE FUNCTION get_unite_legale"
 
 CREATE OR REPLACE FUNCTION get_unite_legale (search text, page_ask text, per_page_ask text) 
 returns table (
@@ -462,6 +464,7 @@ BEGIN
 end;$$;;
 
 
+\! echo "#### 70-create-view-and-functions CREATE OR REPLACE FUNCTION get_etablissement_fts"
 
 CREATE OR REPLACE FUNCTION get_etablissement_fts (search text, page_ask text, per_page_ask text) 
 returns table (
@@ -893,6 +896,7 @@ BEGIN
     END IF;
 end;$$;
 
+\! echo "#### 70-create-view-and-functions CREATE OR REPLACE FUNCTION nombre_etablissements"
 
 CREATE OR REPLACE FUNCTION get_etablissements (siren_search text, page_ask text) 
 returns table (
@@ -1038,6 +1042,7 @@ BEGIN
 end;$$;;
 
 
+\! echo "#### 70-create-view-and-functions CREATE OR REPLACE FUNCTION get_etablissements"
 
 CREATE OR REPLACE FUNCTION get_etablissement (siret_search text) 
 returns table (
